@@ -1,4 +1,4 @@
-cat > README.md <<'EOF'
+
 # Automation Exercise QA Project
 
 ## Overview
