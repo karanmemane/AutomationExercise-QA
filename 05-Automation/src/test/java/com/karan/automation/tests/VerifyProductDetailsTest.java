@@ -1,8 +1,10 @@
+
 package com.karan.automation.tests;
 
 import java.time.Duration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -17,8 +19,9 @@ public class VerifyProductDetailsTest {
     @Test
     public void verifyProductDetails() {
 
-        // Step 1: Launch Chrome and create an explicit wait of 20 seconds
+        // Step 1: Launch Chrome and set an explicit wait of 20 seconds
         WebDriver driver = new ChromeDriver();
+
         WebDriverWait wait = new WebDriverWait(
             driver, Duration.ofSeconds(20)
         );
@@ -27,9 +30,9 @@ public class VerifyProductDetailsTest {
             // Step 2: Open the All Products page
             driver.get("https://www.automationexercise.com/products");
 
-            // Step 3: Wait for the All Products heading to become visible
+            // Step 3: Locate and verify the All Products heading
             By productsHeading = By.xpath(
-                "/html/body/section[2]/div/div/div[2]/div/h2"
+                "//section[2]//div[contains(@class,'features_items')]/h2"
             );
 
             WebElement heading = wait.until(
@@ -38,32 +41,48 @@ public class VerifyProductDetailsTest {
                 )
             );
 
-            // Verify that the correct products page is displayed
             Assert.assertEquals(
                 heading.getText().trim(),
                 "ALL PRODUCTS",
                 "All Products heading is incorrect"
             );
 
-            // Step 4: Locate and click the first product's View Product link
-            By viewProductButton = By.xpath(
-                "/html/body/section[2]/div/div/div[2]/div/div[2]/div/div[2]/ul/li/a"
+            // Step 4: Locate the first product's View Product link
+            By viewProductButton = By.cssSelector(
+                "a[href='/product_details/1']"
             );
 
+            // Wait until the link is visible
+            WebElement viewProduct = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                    viewProductButton
+                )
+            );
+
+            // Scroll the link into the center of the viewport
+            ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});",
+                viewProduct
+            );
+
+            // Wait until Selenium considers the link clickable, then click
             wait.until(
-                ExpectedConditions.elementToBeClickable(viewProductButton)
+                ExpectedConditions.elementToBeClickable(
+                    viewProductButton
+                )
             ).click();
 
-            // Step 5: Wait for the product name to appear on the details page
+            // Step 5: Locate and verify the product name
             By productName = By.xpath(
                 "//div[contains(@class,'product-information')]/h2"
             );
 
             WebElement name = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(productName)
+                ExpectedConditions.visibilityOfElementLocated(
+                    productName
+                )
             );
 
-            // Verify the first product is Blue Top
             Assert.assertEquals(
                 name.getText().trim(),
                 "Blue Top",
@@ -93,7 +112,9 @@ public class VerifyProductDetailsTest {
             );
 
             WebElement price = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(productPrice)
+                ExpectedConditions.visibilityOfElementLocated(
+                    productPrice
+                )
             );
 
             Assert.assertEquals(
@@ -117,6 +138,7 @@ public class VerifyProductDetailsTest {
                 availability.getText().contains("Availability:"),
                 "Availability information is missing"
             );
+
             Assert.assertTrue(
                 availability.getText().contains("In Stock"),
                 "Product is not shown as in stock"
@@ -137,35 +159,40 @@ public class VerifyProductDetailsTest {
                 condition.getText().contains("Condition:"),
                 "Product condition information is missing"
             );
+
             Assert.assertTrue(
                 condition.getText().contains("New"),
                 "Product condition is not shown as New"
             );
 
             // Step 10: Verify the product brand
-            // Use p[4], which corresponds to the brand paragraph
             By productBrand = By.xpath(
                 "//div[contains(@class,'product-information')]/p[4]"
             );
 
             WebElement brand = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(productBrand)
+                ExpectedConditions.visibilityOfElementLocated(
+                    productBrand
+                )
             );
 
             Assert.assertTrue(
                 brand.getText().contains("Brand:"),
                 "Product brand information is missing"
             );
+
             Assert.assertTrue(
                 brand.getText().contains("Polo"),
                 "Product brand is not shown as Polo"
             );
 
-            // Print this message only if all assertions pass
-            System.out.println("Product details verification passed!");
+            // Print success only when all assertions pass
+            System.out.println(
+                "Product details verification passed!"
+            );
 
         } finally {
-            // Step 11: Always close the browser, even if an assertion fails
+            // Step 11: Close the browser even if the test fails
             driver.quit();
         }
     }
