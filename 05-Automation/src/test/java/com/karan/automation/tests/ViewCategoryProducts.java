@@ -42,7 +42,7 @@ public class ViewCategoryProducts {
 
             // Step 3: Verify Categories heading is visible
             By categoryHeading = By.xpath(
-                    "/html/body/section[2]/div/div/div[1]/div/h2");
+                    "//div[contains(@class,'category-products')]/h2");
 
             String actualCategoryHeading = wait.until(
                     ExpectedConditions.visibilityOfElementLocated(categoryHeading))
