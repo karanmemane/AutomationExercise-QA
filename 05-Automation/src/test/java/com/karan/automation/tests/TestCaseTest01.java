@@ -1,7 +1,6 @@
 
 package com.karan.automation.tests;
 
-import org.openqa.selenium.By;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 
@@ -12,7 +11,9 @@ public class TestCaseTest01 extends BaseTest {
     @Test
     public void testCase01() {
 
-        System.out.println("Test Case 01: Verify that a new user can register successfully.");
+        System.out.println(
+            "Test Case 01: Verify that a new user can register successfully."
+        );
 
         TestCasePage01 testCasePage = new TestCasePage01(driver);
 
@@ -40,12 +41,6 @@ public class TestCaseTest01 extends BaseTest {
 
         // Step 7: Click Signup
         testCasePage.clickSignupButton();
-
-        // Diagnostic: Check what page or message appears after Signup
-        System.out.println("URL after Signup: " + driver.getCurrentUrl());
-        System.out.println("Page Title: " + driver.getTitle());
-        System.out.println("Page message after Signup:");
-        System.out.println(driver.findElement(By.tagName("body")).getText());
 
         // Step 8: Verify Account Information
         Assert.assertTrue(
@@ -94,6 +89,20 @@ public class TestCaseTest01 extends BaseTest {
             "User is not logged in successfully!"
         );
 
-        System.out.println("Test Case 01 passed: User registered successfully.");
+        // Step 17: Delete account
+        testCasePage.clickDeleteAccount();
+
+        // Step 18: Verify account deleted
+        Assert.assertTrue(
+            testCasePage.isAccountDeleted(),
+            "Account deletion failed!"
+        );
+
+        // Step 18: Click Continue
+        testCasePage.clickContinueButton();
+
+        System.out.println(
+            "Test Case 01 passed: Registration and account deletion successful."
+        );
     }
 }

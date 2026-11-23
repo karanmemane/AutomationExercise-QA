@@ -28,6 +28,8 @@ public class TestCasePage01 {
     private By createAccountButton = By.cssSelector("[data-qa='create-account']");
     private By accountCreatedHeading = By.cssSelector("[data-qa='account-created']");
     private By continueButton = By.linkText("Continue");
+    private By deleteAccountButton = By.xpath("//a[contains(., 'Delete Account')]");
+    private By accountDeletedHeading = By.xpath("//h2[@data-qa='account-deleted']");
 
     // Constructor
     public TestCasePage01(WebDriver driver) {
@@ -220,7 +222,7 @@ public class TestCasePage01 {
             System.out.println("Account created heading was not displayed.");
             System.out.println("Current URL: " + driver.getCurrentUrl());
             System.out.println("Page content:");
-            System.out.println(driver.findElement(By.tagName("body")).getText());
+            System.out.println(getPageText());
             return false;
         }
     }
@@ -232,15 +234,48 @@ public class TestCasePage01 {
 
     // Step 16: Verify logged-in username
     public boolean isLoggedInAsUser(String username) {
+
         By loggedInUser = By.xpath(
-            "//a[contains(., 'Logged in as')]/b[text()='" + username + "']"
+            "//a[contains(normalize-space(.), 'Logged in as') and .//b[normalize-space()='" 
+            + username + "']]"
         );
 
         try {
             return wait.until(
                 ExpectedConditions.visibilityOfElementLocated(loggedInUser)
             ).isDisplayed();
+
         } catch (TimeoutException e) {
+            System.out.println("Logged-in username was not displayed.");
+            System.out.println("Current URL: " + driver.getCurrentUrl());
+            System.out.println("Page content:");
+            System.out.println(getPageText());
+            return false;
+        }
+    }
+
+    // Step 17: Click Delete Account
+    public void clickDeleteAccount() {
+        wait.until(
+            ExpectedConditions.elementToBeClickable(deleteAccountButton)
+        ).click();
+    }
+
+    // Step 18: Verify account deleted
+    public boolean isAccountDeleted() {
+
+        try {
+            WebElement heading = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(accountDeletedHeading)
+            );
+
+            return heading.isDisplayed();
+
+        } catch (TimeoutException e) {
+            System.out.println("Account deleted heading was not displayed.");
+            System.out.println("Current URL: " + driver.getCurrentUrl());
+            System.out.println("Page content:");
+            System.out.println(getPageText());
             return false;
         }
     }
