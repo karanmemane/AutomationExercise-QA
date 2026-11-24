@@ -6,7 +6,6 @@ import org.testng.Assert;
 
 import com.karan.automation.pages.HomePage;
 import com.karan.automation.pages.SignupPage;
-import com.karan.automation.pages.LoginPage;
 import com.karan.automation.pages.AccountPage;
 
 public class TestCaseTest01 extends BaseTest {
