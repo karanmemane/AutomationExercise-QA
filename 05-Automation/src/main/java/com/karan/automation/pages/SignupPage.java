@@ -320,4 +320,21 @@ public class SignupPage {
             }
         }
     }
+
+    public boolean isEmailAlreadyExistVisible() {
+        By emailAlreadyExistMessage =
+            By.cssSelector("#form > div > div.row > div:nth-child(3) > div > form > p");
+
+        try {
+            return wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                    emailAlreadyExistMessage
+                )
+            ).isDisplayed();
+
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
 }
