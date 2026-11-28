@@ -33,4 +33,11 @@ public class HomePage {
             ExpectedConditions.elementToBeClickable(signupLoginButton)
         ).click();
     }
+
+    public void clickContactUs() {
+        By contactUsButton = By.xpath("//*[@id=\"header\"]/div/div/div/div[2]/div/ul/li[8]/a");
+        wait.until(
+            ExpectedConditions.elementToBeClickable(contactUsButton)
+        ).click();
+    }
 }
